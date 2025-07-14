@@ -1,0 +1,41 @@
+# .github/workflows/makefile-ci.yml
+
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # 检出您的代码库
+    - uses: actions/checkout@v4
+
+    # 运行配置脚本
+    - name: configure
+      run: ./configure
+
+    # 安装依赖项
+    - name: Install dependencies
+      run: make
+
+    # 运行检查
+    - name: Run check
+      run: make check
+
+    # 新增：执行您指定的构建命令
+    - name: Build for Stretch
+      env:
+        VERSION: 5.6.0
+        DISTS: stretch
+      run: make
+
+    # 运行 distcheck
+    - name: Run distcheck
+      run: make distcheck
